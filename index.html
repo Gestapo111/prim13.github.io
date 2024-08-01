@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Evaluación: La historia de la Tierra (Geología)</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        h1 {
+            color: #333;
+        }
+        .quiz-container {
+            background-color: #fff;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 80%;
+            max-width: 800px;
+        }
+        .question {
+            margin-bottom: 15px;
+        }
+        .options {
+            list-style-type: none;
+            padding: 0;
+        }
+        .options li {
+            margin-bottom: 10px;
+        }
+        button {
+            background-color: #28a745;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #218838;
+        }
+        #results {
+            margin-top: 20px;
+            font-size: 18px;
+        }
+        footer {
+            background-color: #333;
+            color: #fff;
+            padding: 10px;
+            width: 100%;
+            text-align: center;
+            position: fixed;
+            bottom: 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>Evaluación: La historia de la Tierra (Geología)</h1>
+    <div class="quiz-container">
+        <div id="quiz"></div>
+        <button id="submit">Enviar respuestas</button>
+        <div id="results"></div>
+    </div>
+    <footer>
+        &copy; Derechos Reservados Prof. Alberto Sanchez
+    </footer>
+    <script>
+        const quizData = [
+            {
+                question: "¿Qué es el ciclo de las rocas?",
+                answers: [
+                    { text: "El proceso de formación, descomposición y reciclaje de rocas.", correct: true },
+                    { text: "El ciclo de vida de un organismo.", correct: false },
+                    { text: "El ciclo del agua.", correct: false }
+                ]
+            },
+            {
+                question: "¿Qué es una roca ígnea?",
+                answers: [
+                    { text: "Una roca formada por la solidificación del magma o lava.", correct: true },
+                    { text: "Una roca formada por la acumulación de sedimentos.", correct: false },
+                    { text: "Una roca transformada por presión y temperatura.", correct: false }
+                ]
+            },
+            {
+                question: "¿Qué es una roca sedimentaria?",
+                answers: [
+                    { text: "Una roca formada por la acumulación y compactación de sedimentos.", correct: true },
+                    { text: "Una roca formada por la solidificación del magma o lava.", correct: false },
+                    { text: "Una roca transformada por presión y temperatura.", correct: false }
+                ]
+            },
+            {
+                question: "¿Qué es una roca metamórfica?",
+                answers: [
+                    { text: "Una roca transformada por presión y temperatura.", correct: true },
+                    { text: "Una roca formada por la acumulación de sedimentos.", correct: false },
+                    { text: "Una roca formada por la solidificación del magma o lava.", correct: false }
+                ]
+            },
+            {
+                question: "¿Qué es el tiempo geológico?",
+                answers: [
+                    { text: "La escala de tiempo que abarca la historia de la Tierra desde su formación.", correct: true },
+                    { text: "La escala de tiempo de una era histórica.", correct: false },
+                    { text: "La escala de tiempo de un año calendario.", correct: false }
+                ]
+            },
+            {
+                question: "¿Qué es la tectónica de placas?",
+                answers: [
+                    { text: "La teoría que explica el movimiento de las placas de la litosfera sobre el manto terrestre.", correct: true },
+                    { text: "La teoría que explica la formación de fósiles.", correct: false },
+                    { text: "La teoría que explica la erosión del suelo.", correct: false }
+                ]
+            },
+            {
+                question: "¿Qué es un terremoto?",
+                answers: [
+                    { text: "Una vibración del suelo causada por el movimiento de las placas tectónicas.", correct: true },
+                    { text: "Una erupción volcánica.", correct: false },
+                    { text: "Una inundación.", correct: false }
+                ]
+            },
+            {
+                question: "¿Qué es un volcán?",
+                answers: [
+                    { text: "Una abertura en la corteza terrestre a través de la cual el magma, gases y cenizas son expulsados.", correct: true },
+                    { text: "Una montaña formada por la erosión.", correct: false },
+                    { text: "Un río subterráneo.", correct: false }
+                ]
+            },
+            {
+                question: "¿Qué es la deriva continental?",
+                answers: [
+                    { text: "La teoría de que los continentes se mueven lentamente sobre la superficie terrestre.", correct: true },
+                    { text: "La teoría de que los océanos se expanden.", correct: false },
+                    { text: "La teoría de que las montañas se erosionan.", correct: false }
+                ]
+            },
+            {
+                question: "¿Qué es el supercontinente Pangea?",
+                answers: [
+                    { text: "Un antiguo supercontinente que existió hace millones de años y que se fragmentó para formar los continentes actuales.", correct: true },
+                    { text: "Un continente actual.", correct: false },
+                    { text: "Un océano antiguo.", correct: false }
+                ]
+            },
+            {
+                question: "¿Qué es un fósil?",
+                answers: [
+                    { text: "Los restos o rastros preservados de organismos antiguos.", correct: true },
+                    { text: "Un tipo de roca ígnea.", correct: false },
+                    { text: "Un tipo de mineral.", correct: false }
+                ]
+            },
+            {
+                question: "¿Qué es la estratigrafía?",
+                answers: [
+                    { text: "El estudio de las capas de rocas y sedimentos para entender la historia geológica.", correct: true },
+                    { text: "El estudio de los fósiles.", correct: false },
+                    { text: "El estudio de los terremotos.", correct: false }
+                ]
+            },
+            {
+                question: "¿Qué es la datación radiométrica?",
+                answers: [
+                    { text: "Un método para determinar la edad de las rocas y fósiles basado en la desintegración de isótopos radiactivos.", correct: true },
+                    { text: "Un método para determinar la temperatura de las rocas.", correct: false },
+                    { text: "Un método para determinar la presión en el manto terrestre.", correct: false }
+                ]
+            },
+            {
+                question: "¿Qué es el ciclo del agua?",
+                answers: [
+                    { text: "El proceso continuo de circulación del agua en la Tierra a través de la evaporación, condensación y precipitación.", correct: true },
+                    { text: "El proceso de formación de rocas ígneas.", correct: false },
+                    { text: "El proceso de erosión del suelo.", correct: false }
+                ]
+            },
+            {
+                question: "¿Qué es la erosión?",
+                answers: [
+                    { text: "El desgaste y transporte de rocas y sedimentos por el viento, el agua o el hielo.", correct: true },
+                    { text: "La formación de rocas ígneas.", correct: false },
+                    { text: "La solidificación del magma.", correct: false }
+                ]
+            },
+            {
+                question: "¿Qué es la sedimentación?",
+                answers: [
+                    { text: "El proceso de deposición de sedimentos transportados por el agua, el viento o el hielo.", correct: true },
+                    { text: "El proceso de desgaste de las rocas.", correct: false },
+                    { text: "El proceso de solidificación del magma.", correct: false }
+                ]
+            },
+            {
+                question: "¿Qué es una cuenca sedimentaria?",
+                answers: [
+                    { text: "Una depresión geológica donde se acumulan sedimentos.", correct: true },
+                    { text: "Una montaña formada por la erosión.", correct: false },
+                    { text: "Un río subterráneo.", correct: false }
+                ]
+            },
+            {
+                question: "¿Qué es la mineralogía?",
+                answers: [
+                    { text: "El estudio de los minerales y sus propiedades.", correct: true },
+                    { text: "El estudio de los fósiles.", correct: false },
+                    { text: "El estudio de los terremotos.", correct: false }
+                ]
+            },
+            {
+                question: "¿Qué es la paleontología?",
+                answers: [
+                    { text: "El estudio de los fósiles y la vida antigua.", correct: true },
+                    { text: "El estudio de los minerales.", correct: false },
+                    { text: "El estudio de los terremotos.", correct: false }
+                ]
+            },
+            {
+                question: "¿Qué es el manto terrestre?",
+                answers: [
+                    { text: "La capa de roca sólida y parcialmente fundida entre la corteza terrestre y el núcleo.", correct: true },
+                    { text: "La capa más externa de la Tierra.", correct: false },
+                    { text: "El núcleo sólido de la Tierra.", correct: false }
+                ]
+            },
+            {
+                question: "¿Qué es la corteza terrestre?",
+                answers: [
+                    { text: "La capa más externa y delgada de la Tierra.", correct: true },
+                    { text: "La capa de roca sólida y parcialmente fundida entre el núcleo y el manto.", correct: false },
+                    { text: "El núcleo sólido de la Tierra.", correct: false }
+                ]
+            },
+            {
+                question: "¿Qué es el núcleo terrestre?",
+                answers: [
+                    { text: "La parte central de la Tierra, compuesta principalmente de hierro y níquel.", correct: true },
+                    { text: "La capa más externa de la Tierra.", correct: false },
+                    { text: "La capa de roca sólida y parcialmente fundida entre la corteza y el manto.", correct: false }
+                ]
+            },
+            {
+                question: "¿Qué es el movimiento de placas tectónicas?",
+                answers: [
+                    { text: "El movimiento lento de las placas de la litosfera sobre el manto terrestre.", correct: true },
+                    { text: "La formación de rocas ígneas.", correct: false },
+                    { text: "La erosión del suelo.", correct: false }
+                ]
+            },
+            {
+                question: "¿Qué es una falla geológica?",
+                answers: [
+                    { text: "Una fractura en la corteza terrestre donde se produce el desplazamiento de las rocas.", correct: true },
+                    { text: "Una montaña formada por la erosión.", correct: false },
+                    { text: "Un río subterráneo.", correct: false }
+                ]
+            },
+            {
+                question: "¿Qué es la deriva continental?",
+                answers: [
+                    { text: "La teoría de que los continentes se mueven lentamente sobre la superficie terrestre.", correct: true },
+                    { text: "La teoría de que los océanos se expanden.", correct: false },
+                    { text: "La teoría de que las montañas se erosionan.", correct: false }
+                ]
+            }
+        ];
+
+        let attempt = 0;
+        const maxAttempts = 3;
+
+        function shuffle(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        function loadQuiz() {
+            const quizContainer = document.getElementById('quiz');
+            quizContainer.innerHTML = '';
+            quizData.forEach((data, index) => {
+                const questionContainer = document.createElement('div');
+                questionContainer.className = 'question';
+
+                const questionTitle = document.createElement('h3');
+                questionTitle.innerText = `${index + 1}. ${data.question}`;
+                questionContainer.appendChild(questionTitle);
+
+                const optionsList = document.createElement('ul');
+                optionsList.className = 'options';
+
+                shuffle(data.answers).forEach(answer => {
+                    const option = document.createElement('li');
+                    const optionLabel = document.createElement('label');
+                    const optionInput = document.createElement('input');
+                    optionInput.type = 'radio';
+                    optionInput.name = `question${index}`;
+                    optionInput.value = answer.correct;
+                    optionLabel.appendChild(optionInput);
+                    optionLabel.appendChild(document.createTextNode(answer.text));
+                    option.appendChild(optionLabel);
+                    optionsList.appendChild(option);
+                });
+
+                questionContainer.appendChild(optionsList);
+                quizContainer.appendChild(questionContainer);
+            });
+        }
+
+        function submitQuiz() {
+            if (attempt >= maxAttempts) {
+                alert('Has alcanzado el número máximo de intentos.');
+                return;
+            }
+
+            const resultsContainer = document.getElementById('results');
+            const answers = document.querySelectorAll('input[type="radio"]:checked');
+            let score = 0;
+
+            quizData.forEach((data, index) => {
+                const selected = answers[index] ? answers[index].value === 'true' : null;
+                if (selected === true) {
+                    score += 0.4; // Cada respuesta correcta vale 0.4 puntos
+                }
+            });
+
+            score = Math.round(score * 10) / 10; // Redondear a un decimal
+            let feedback = quizData.map((data, index) => {
+                const selected = answers[index] ? answers[index].value === 'true' : null;
+                let result;
+                if (selected === null) {
+                    result = "No contestada";
+                } else if (selected === true) {
+                    result = "Correcta";
+                } else {
+                    result = "Incorrecta";
+                }
+                return `<p>${index + 1}. ${result}</p>`;
+            }).join("");
+
+            resultsContainer.innerHTML = `<h3>Resultados:</h3><p>Puntaje: ${score} / 10</p>${feedback}`;
+
+            attempt++;
+            if (attempt >= maxAttempts) {
+                alert('Has alcanzado el número máximo de intentos.');
+            }
+        }
+
+        document.getElementById('submit').addEventListener('click', submitQuiz);
+
+        loadQuiz();
+    </script>
+</body>
+</html>
